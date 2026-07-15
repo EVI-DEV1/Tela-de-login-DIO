@@ -68,3 +68,22 @@ export const StatCard = styled.div`
 
   color:white;
 `;
+export const ProfileContentCard = styled.div`
+  width: 100%;
+  max-width: 900px;
+
+  margin: 8px auto 0;
+
+  background: #202024;
+  border: 1px solid #2f2f35;
+  border-radius: 18px;
+
+  padding: 28px;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 20px;
+  }
+`;

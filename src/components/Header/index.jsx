@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBars, FaSearch } from "react-icons/fa";
-import {LoginButton} from "./styles";
+
 import logo from "../../assets/logo-dio.png";
+import { api } from "../../services/api";
 
 import {
   Container,
@@ -18,15 +19,15 @@ import {
   DrawerOverlay,
   DrawerHeader,
   DrawerItem,
+  LoginButton,
 } from "./styles";
 
-const Header = ({
-  variant = "feed",
-  search = "",
-  setSearch = () => {},
-}) => {
+const Header = ({ variant = "feed", search = "", setSearch = () => {} }) => {
   const navigate = useNavigate();
+
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const loggedUser = JSON.parse(localStorage.getItem("loggedUser"));
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -34,15 +35,36 @@ const Header = ({
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("loggedUser");
+    navigate("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    const confirmDelete = window.confirm(
+      "Tem certeza que deseja excluir sua conta? Essa ação não poderá ser desfeita."
+    );
+
+    if (!confirmDelete) return;
+
+    try {
+      await api.delete(`/users/${loggedUser.id}`);
+
+      localStorage.removeItem("loggedUser");
+
+      alert("Conta excluída com sucesso.");
+      navigate("/");
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao excluir conta.");
+    }
+  };
+
   return (
     <>
       <Container>
         <Wrapper>
-          <Logo
-            src={logo}
-            alt="logo"
-            onClick={() => navigate("/")}
-          />
+          <Logo src={logo} alt="logo" onClick={() => navigate("/")} />
 
           {variant === "feed" && (
             <>
@@ -60,9 +82,9 @@ const Header = ({
 
               <Menu>
                 <UserAvatar
-                  src="https://i.pravatar.cc/40"
-                  alt="user"
-                  onClick={() => setDrawerOpen(true)}
+                  src={loggedUser?.avatar || "https://i.pravatar.cc/40"}
+                  alt={loggedUser?.name || "user"}
+                  onClick={() => navigate("/profile")}
                 />
               </Menu>
 
@@ -74,10 +96,10 @@ const Header = ({
 
           {variant === "home" && (
             <Menu>
-               <LoginButton onClick={() => navigate("/login")}>
-                 Entrar
-                </LoginButton>
-             </Menu>
+              <LoginButton onClick={() => navigate("/login")}>
+                Entrar
+              </LoginButton>
+            </Menu>
           )}
         </Wrapper>
       </Container>
@@ -89,9 +111,7 @@ const Header = ({
               <h3>Menu</h3>
             </DrawerHeader>
 
-            <DrawerItem onClick={() => navigate("/")}>
-              Feed
-            </DrawerItem>
+            <DrawerItem onClick={() => navigate("/feed")}>Feed</DrawerItem>
 
             <DrawerItem onClick={() => navigate("/profile")}>
               Perfil
@@ -99,6 +119,18 @@ const Header = ({
 
             <DrawerItem onClick={() => navigate("/settings")}>
               Configurações
+            </DrawerItem>
+
+            <DrawerItem onClick={handleLogout}>Sair da conta</DrawerItem>
+
+            <DrawerItem
+              onClick={handleDeleteAccount}
+              style={{
+                color: "#ff5c5c",
+                fontWeight: "bold",
+              }}
+            >
+              Excluir conta
             </DrawerItem>
           </Drawer>
         </DrawerOverlay>

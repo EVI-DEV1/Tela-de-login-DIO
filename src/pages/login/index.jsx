@@ -33,10 +33,16 @@ const Login = () => {
         try{
             const {data} = await api.get(`/users?email=${formData.email}&senha=${formData.senha}`);
             
-            if(data.length && data[0].id){
-                navigate('/feed') 
-                return
-            }
+            if (data.length && data[0].id) {
+
+    localStorage.setItem(
+        "loggedUser",
+        JSON.stringify(data[0])
+    );
+
+    navigate("/feed");
+    return;
+    }
 
             alert('Usuário ou senha inválido')
         }catch(e){

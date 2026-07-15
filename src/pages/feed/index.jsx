@@ -7,7 +7,6 @@ import { posts } from "../../data/posts";
 
 const Feed = () => {
     const [search, setSearch] = useState("");
-    
     const filteredPosts = posts.filter((post) => {
     const texto = search.toLowerCase();
 
@@ -24,7 +23,7 @@ const Feed = () => {
   return (
     <>
     
-    const [search, setSearch] = useState("");
+   
 
  <Header
   variant="feed"
