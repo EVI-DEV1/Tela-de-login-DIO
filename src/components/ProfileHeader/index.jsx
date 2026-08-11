@@ -1,6 +1,8 @@
 import React from "react";
 import { FaCamera } from "react-icons/fa";
 
+import defaultAvatar from "../../assets/avatar-default.svg";
+
 import {
   Container,
   Cover,
@@ -24,17 +26,30 @@ const ProfileHeader = ({
   onAvatarCameraClick,
   onCoverCameraClick,
 }) => {
+  const avatarSource = user?.avatar || defaultAvatar;
+
   return (
     <Container>
       <CoverContainer>
-        <Cover image={user?.cover} onClick={onCoverClick} />
+        <Cover
+          image={user?.cover}
+          onClick={onCoverClick}
+          role={user?.cover ? "button" : undefined}
+          title={
+            user?.cover
+              ? "Visualizar foto de capa"
+              : "Adicione uma foto de capa"
+          }
+        />
 
         <CoverButton
           type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            onCoverCameraClick();
+          onClick={(event) => {
+            event.stopPropagation();
+            onCoverCameraClick?.();
           }}
+          aria-label="Alterar foto de capa"
+          title="Alterar foto de capa"
         >
           <FaCamera />
         </CoverButton>
@@ -44,17 +59,23 @@ const ProfileHeader = ({
         <AvatarWrapper>
           <AvatarContainer>
             <Avatar
-              src={user?.avatar || "https://i.pravatar.cc/200?img=32"}
-              alt={user?.name || "Perfil"}
+              src={avatarSource}
+              alt={
+                user?.name
+                  ? `Foto de ${user.name}`
+                  : "Avatar padrão"
+              }
               onClick={onAvatarClick}
             />
 
             <CameraButton
               type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                onAvatarCameraClick();
+              onClick={(event) => {
+                event.stopPropagation();
+                onAvatarCameraClick?.();
               }}
+              aria-label="Alterar foto de perfil"
+              title="Alterar foto de perfil"
             >
               <FaCamera />
             </CameraButton>
@@ -62,15 +83,17 @@ const ProfileHeader = ({
         </AvatarWrapper>
 
         <UserInfo>
-          <div>
-            <Name>{user?.name || "Usuário"}</Name>
-          </div>
+          <Name>{user?.name || "Usuário"}</Name>
 
           <ProfileLinks>
             {user?.github && (
               <InfoItem>
                 💻{" "}
-                <a href={user.github} target="_blank" rel="noreferrer">
+                <a
+                  href={user.github}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   GitHub
                 </a>
               </InfoItem>
@@ -79,7 +102,11 @@ const ProfileHeader = ({
             {user?.linkedin && (
               <InfoItem>
                 🔗{" "}
-                <a href={user.linkedin} target="_blank" rel="noreferrer">
+                <a
+                  href={user.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   LinkedIn
                 </a>
               </InfoItem>
@@ -88,7 +115,11 @@ const ProfileHeader = ({
             {user?.portfolio && (
               <InfoItem>
                 🌐{" "}
-                <a href={user.portfolio} target="_blank" rel="noreferrer">
+                <a
+                  href={user.portfolio}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Portfólio
                 </a>
               </InfoItem>

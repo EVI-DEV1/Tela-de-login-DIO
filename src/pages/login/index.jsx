@@ -62,7 +62,7 @@ const Login = () => {
             </Column>
             <Column>
                 <Wrapper>
-                <TitleLogin>Bem-vindo!</TitleLogin>
+                <TitleLogin>Bem-vindo ao DevConnect</TitleLogin>
                 <SubtitleLogin>  Entre com seu e-mail e senha para acessar sua conta.</SubtitleLogin>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Input placeholder="E-mail" leftIcon={<MdEmail />} name="email"  control={control} />

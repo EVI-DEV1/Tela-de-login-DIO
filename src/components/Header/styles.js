@@ -11,18 +11,7 @@ export const Container = styled.header`
   top: 0;
   z-index: 10;
 `;
-
-export const Wrapper = styled.div`
-  width: 100%;
-  max-width: 1200px;
-
-  margin: 0 auto;
-  padding: 0 24px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
+;
 
 export const Logo = styled.img`
   height: 35px;
@@ -68,25 +57,49 @@ export const IconButton = styled.button`
 export const Menu = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 16px;
-`;;
-
-export const UserAvatar = styled.img`
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  cursor: pointer;
+  justify-content: center;
 `;
 
-export const MobileIcon = styled.div`
-  display: none;
-  color: white;
-  font-size: 22px;
+export const UserAvatar = styled.img`
+  width: 42px;
+  height: 42px;
+
+  border-radius: 50%;
+  object-fit: cover;
+
   cursor: pointer;
 
-  @media (max-width: 768px) {
-    display: block;
+  border: 2px solid #00e676;
+
+  transition: .2s;
+
+  &:hover{
+    transform: scale(1.05);
+  }
+`;
+
+export const MobileIcon = styled.button`
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-left: 18px;
+
+  background: transparent;
+  border: none;
+
+  color: #ffffff;
+  cursor: pointer;
+
+  font-size: 22px;
+
+  transition: .2s;
+
+  &:hover{
+    color: #00E676;
   }
 `;
 
@@ -95,37 +108,66 @@ export const MobileIcon = styled.div`
 export const DrawerOverlay = styled.div`
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+
+  background: rgba(0, 0, 0, 0.65);
+
+  z-index: 9998;
 `;
 
-export const Drawer = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 250px;
-  height: 100%;
-  background: #1a1a1a;
-  padding: 20px;
+export const Wrapper = styled.div`
+  width: 100%;
+
   display: flex;
-  flex-direction: column;
-  gap: 15px;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 24px;
 `;
 
 export const DrawerHeader = styled.div`
-  color: white;
-  margin-bottom: 10px;
+  width: 100%;
+
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  h3 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 20px;
+  }
 `;
 
 export const DrawerItem = styled.button`
-  background: transparent;
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 14px 12px;
+
   border: none;
-  color: white;
-  text-align: left;
-  font-size: 16px;
+  border-radius: 9px;
+
+  background: transparent;
+  color: #ffffff;
+
   cursor: pointer;
 
+  text-align: left;
+  font-size: 16px;
+
+  transition: 0.2s;
+
+  svg {
+    flex-shrink: 0;
+    font-size: 18px;
+  }
+
   &:hover {
-    color: #f50;
+    background: rgba(255, 255, 255, 0.08);
   }
 `;
 
@@ -148,5 +190,41 @@ export const LoginButton = styled.button`
 
   &:hover {
     background: #E4105D;
+  }
+`;
+export const RightMenu = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+export const Drawer = styled.aside`
+  position: fixed;
+  top: 0;
+  right: 0;
+
+  width: 320px;
+  max-width: 85vw;
+  height: 100vh;
+
+  padding: 28px 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  overflow-y: auto;
+
+  background: #171717;
+  color: #ffffff;
+
+  box-shadow: -8px 0 28px rgba(0, 0, 0, 0.45);
+
+  z-index: 9999;
+
+  @media (max-width: 600px) {
+    width: 82vw;
+    max-width: 320px;
+    padding: 24px 18px;
   }
 `;

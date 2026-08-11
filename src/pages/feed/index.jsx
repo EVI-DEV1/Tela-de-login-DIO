@@ -1,84 +1,209 @@
-import React, { useState } from "react";
-import { Card } from '../../components/Card';
-import Header  from '../../components/Header';
-import { UserInfo } from "../../components/UserInfo";
-import { Container, Column, Title, TitleHighlight, } from './styles';
-import { posts } from "../../data/posts";
+import { useEffect, useMemo, useState } from "react";
+import { CommunityChat } from "../../components/CommunityChat";
+import Header from "../../components/Header";
+import { Card } from "../../components/Card";
+import { CreatePost } from "../../components/CreatePost";
+
+
+import { posts as initialPosts } from "../../data/posts";
+
+import {
+  Container,
+  Column,
+  FeedHeader,
+  Title,
+  Subtitle,
+  EmptyState,
+  AdminMessage,
+} from "./styles";
+
+const FEED_STORAGE_KEY = "communityFeedPostsV18";
 
 const Feed = () => {
-    const [search, setSearch] = useState("");
-    const filteredPosts = posts.filter((post) => {
-    const texto = search.toLowerCase();
+  const loggedUser = JSON.parse(
+    localStorage.getItem("loggedUser")
+  );
 
-    return (
-        post.user.toLowerCase().includes(texto) ||
-        post.title.toLowerCase().includes(texto) ||
-        post.description.toLowerCase().includes(texto) ||
-        post.tags.some(tag =>
-            tag.toLowerCase().includes(texto)
-        )
+  const isAdmin =
+    loggedUser?.role === "admin" ||
+    loggedUser?.isAdmin === true;
+
+  const [search, setSearch] = useState("");
+
+  const [feedPosts, setFeedPosts] = useState(() => {
+    try {
+      const savedPosts = JSON.parse(
+        localStorage.getItem(FEED_STORAGE_KEY)
+      );
+
+      if (Array.isArray(savedPosts)) {
+        return savedPosts;
+      }
+    } catch (error) {
+      console.error("Erro ao carregar publicações:", error);
+    }
+
+    return initialPosts;
+  });
+
+  useEffect(() => {
+    localStorage.setItem(
+      FEED_STORAGE_KEY,
+      JSON.stringify(feedPosts)
     );
-});
+  }, [feedPosts]);
+
+  const filteredPosts = useMemo(() => {
+    const normalizedSearch = search
+      .trim()
+      .toLowerCase();
+
+    if (!normalizedSearch) {
+      return feedPosts;
+    }
+
+    return feedPosts.filter((post) => {
+      const searchableText = [
+        post.user,
+        post.title,
+        post.description,
+        ...(post.tags || []),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+
+      return searchableText.includes(normalizedSearch);
+    });
+  }, [feedPosts, search]);
+
+  const handleCreatePost = (postData) => {
+    if (!isAdmin) {
+      alert(
+        "Somente administradores podem criar publicações."
+      );
+      return;
+    }
+
+    const newPost = {
+      id: Date.now(),
+
+      userId: loggedUser?.id,
+      user: loggedUser?.name || "Administrador",
+      avatar: loggedUser?.avatar || "",
+
+      banner: postData.banner || "",
+      time: "Agora mesmo",
+
+      title: postData.title,
+      description: postData.description,
+      tags: postData.tags || [],
+
+      likes: 0,
+      comments: 0,
+
+      likedBy: [],
+      savedBy: [],
+      commentsList: [],
+
+      subscribers: 0,
+      subscribedBy: [],
+
+      courseUrl: postData.courseUrl || "",
+
+      createdAt: new Date().toISOString(),
+    };
+
+    setFeedPosts((currentPosts) => [
+      newPost,
+      ...currentPosts,
+    ]);
+  };
+
+  const handleUpdatePost = (updatedPost) => {
+    setFeedPosts((currentPosts) =>
+      currentPosts.map((post) =>
+        post.id === updatedPost.id
+          ? updatedPost
+          : post
+      )
+    );
+  };
+
+  const handleDeletePost = (postId) => {
+    if (!isAdmin) {
+      alert(
+        "Somente administradores podem apagar publicações."
+      );
+      return;
+    }
+
+    const confirmed = window.confirm(
+      "Deseja realmente apagar esta publicação?"
+    );
+
+    if (!confirmed) return;
+
+    setFeedPosts((currentPosts) =>
+      currentPosts.filter((post) => post.id !== postId)
+    );
+  };
 
   return (
     <>
-    
-   
+      <Header
+        variant="feed"
+        search={search}
+        setSearch={setSearch}
+      />
 
- <Header
-  variant="feed"
-  search={search}
-  setSearch={setSearch}
-   />
+      <Container>
+        <Column flex={3}>
+          <FeedHeader>
+            <Title>Comunidade Dev</Title>
 
-        <Container>
-            <Column flex={3}>
-                <Title> Comunidade Dev </Title>
-                {filteredPosts.map((post) => (
-    <Card
-        key={post.id}
-        post={post}
-    />
-))}
-            </Column>
-            <Column flex={1}>
+            <Subtitle>
+              Compartilhe seus projetos, estudos e conquistas
+              com outros desenvolvedores.
+            </Subtitle>
+          </FeedHeader>
 
-    <TitleHighlight>TOP 5 DA SEMANA</TitleHighlight>
+          {isAdmin ? (
+            <CreatePost
+              user={loggedUser}
+              onCreate={handleCreatePost}
+            />
+          ) : (
+            <AdminMessage>
+              As novas publicações são adicionadas pelos
+              administradores da plataforma.
+            </AdminMessage>
+          )}
 
-<UserInfo
-    nome="Laura Silva"
-    image="https://api.dicebear.com/9.x/adventurer/svg?seed=Laura"
-    percentual={92}
-/>
+          {filteredPosts.length === 0 ? (
+            <EmptyState>
+              Nenhuma publicação encontrada para “{search}”.
+            </EmptyState>
+          ) : (
+            filteredPosts.map((post) => (
+              <Card
+                key={post.id}
+                post={post}
+                currentUser={loggedUser}
+                isAdmin={isAdmin}
+                onUpdate={handleUpdatePost}
+                onDelete={handleDeletePost}
+              />
+            ))
+          )}
+        </Column>
 
-<UserInfo
-    nome="Maria Souza"
-    image="https://api.dicebear.com/9.x/adventurer/svg?seed=Maria"
-    percentual={88}
-/>
-
-<UserInfo
-    nome="João Silva"
-    image="https://api.dicebear.com/9.x/adventurer/svg?seed=Joao"
-    percentual={84}
-/>
-
-<UserInfo
-    nome="Ana Costa"
-    image="https://api.dicebear.com/9.x/adventurer/svg?seed=Ana"
-    percentual={81}
-/>
-
-<UserInfo
-    nome="Lucas Oliveira"
-    image="https://api.dicebear.com/9.x/adventurer/svg?seed=Lucas"
-    percentual={79}
-/>
-
-</Column>
-            
-        </Container>
+        <Column flex={1}>
+  <CommunityChat currentUser={loggedUser} />
+</Column>   
+      </Container>
     </>
-  )
-}
+  );
+};
+
 export default Feed;

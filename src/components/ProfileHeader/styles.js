@@ -4,17 +4,22 @@ export const Container = styled.div`
     width:100%;
     margin-bottom:12px;
 `;
-
 export const Cover = styled.div`
   width: 100%;
   height: 220px;
   border-radius: 16px;
-  cursor: pointer;
+  cursor: ${({ image }) =>
+    image ? "pointer" : "default"};
 
   background: ${({ image }) =>
     image
-      ? `url(${image}) center/cover no-repeat`
-      : `linear-gradient(135deg, #1f1f1f, #2d2d2d, #6f00ff)`};
+      ? `url(${image}) center / cover no-repeat`
+      : `linear-gradient(
+          135deg,
+          #1f1f1f,
+          #2d2d2d,
+          #6f00ff
+        )`};
 `;
 
 export const Content = styled.div`

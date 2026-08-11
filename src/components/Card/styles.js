@@ -1,169 +1,427 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
+export const CardContainer = styled.article`
+  width: 100%;
+  overflow: hidden;
 
-export const CardContainer = styled.div`
-    width: 100%;
-    overflow: hidden;
+  background: #211c33;
+  border-radius: 22px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
 
-    background: #211C33;
+  margin-bottom: 32px;
 
-    border-radius: 22px;
+  transition: 0.3s;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 
-    border: 1px solid rgba(255,255,255,.05);
-
-    margin-bottom: 32px;
-
-    transition: all .35s ease;
-
-    box-shadow: 0 10px 25px rgba(0,0,0,.25);
-
-    &:hover{
-        transform: translateY(-8px);
-        box-shadow: 0 25px 45px rgba(0,0,0,.45);
-        border-color:#00E676;
-    }
+  &:hover {
+    border-color: rgba(0, 230, 118, 0.55);
+    box-shadow: 0 18px 38px rgba(0, 0, 0, 0.4);
+  }
 `;
 
 export const ImageBackground = styled.img`
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 260px;
+
+  display: block;
+  object-fit: cover;
+
+  @media (max-width: 600px) {
+    height: 210px;
+  }
 `;
 
-export const Content = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 26px;
-`
-
 export const UserInfo = styled.div`
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 12px;
+  display: flex;
+  align-items: center;
 
-    div {
-        margin-left: 12px;
-    }
+  margin-bottom: 12px;
+  padding-right: 64px;
 
-   h4{
-    font-size:18px;
-    font-weight:700;
-    color:#FFF;
-}
+  div {
+    margin-left: 12px;
+  }
 
-p{
-    font-size:13px;
-    color:#9FA8B7;
-}
-`
+  h4 {
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  p {
+    color: #9fa8b7;
+    font-size: 13px;
+  }
+`;
+
 export const UserPicture = styled.img`
-    width: 54px;
-    height: 54px;
+  width: 54px;
+  height: 54px;
 
-    border-radius:50%;
+  border-radius: 50%;
+  border: 3px solid #00e676;
 
-    border:3px solid #00E676;
-
-    object-fit:cover;
+  object-fit: cover;
 `;
 
 export const PostInfo = styled.div`
-    margin-top:18px;
-    margin-bottom:20px;
+  margin: 18px 0 8px;
 
-    h4{
-        font-size:26px;
-        font-weight:700;
-        color:#FFF;
-        margin-bottom:12px;
-        line-height:36px;
-    }
+  h4 {
+    color: #ffffff;
 
-    p{
-        color:#C8C8C8;
-        line-height:28px;
-        font-size:16px;
-    }
+    margin-bottom: 12px;
 
-    strong{
-        color:#00E676;
-        cursor:pointer;
-    }
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  p {
+    color: #c8c8c8;
+
+    font-size: 16px;
+    line-height: 1.7;
+    white-space: pre-wrap;
+  }
 `;
 
 export const HasInfo = styled.div`
-    display:flex;
-    flex-wrap:wrap;
-    gap:12px;
-    margin-top:20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 
-    span{
-        background:#30294A;
-        color:#00E676;
+  margin-top: 18px;
 
-        padding:9px 18px;
+  span {
+    padding: 8px 15px;
 
-        border-radius:40px;
+    border-radius: 30px;
 
-        font-size:13px;
+    background: #30294a;
+    color: #00e676;
 
-        font-weight:600;
-
-        transition:.3s;
-    }
-
-    span:hover{
-        background:#00E676;
-        color:#211C33;
-    }
+    font-size: 13px;
+    font-weight: 600;
+  }
 `;
 
+
 export const Actions = styled.div`
-    display:flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
 
-    justify-content:space-between;
+  margin-top: 24px;
+  padding-top: 18px;
 
-    align-items:center;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 
-    margin-top:25px;
+  @media (max-width: 650px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+`;
 
-    padding-top:18px;
+export const ActionButton = styled.button`
+  min-height: 42px;
 
-    border-top:1px solid rgba(255,255,255,.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 
-    button{
+  padding: 9px;
 
-        display:flex;
+  border: none;
+  border-radius: 8px;
 
-        align-items:center;
+  background: ${({ $active }) =>
+    $active ? "rgba(0, 230, 118, 0.12)" : "transparent"};
 
-        gap:8px;
+  color: ${({ $active }) =>
+    $active ? "#00e676" : "#b8b8b8"};
 
-        background:none;
+  cursor: pointer;
+  font-size: 14px;
 
-        border:none;
+  transition: 0.2s;
 
-        color:#B8B8B8;
+  svg {
+    font-size: 18px;
+  }
 
-        cursor:pointer;
+  &:hover {
+    background: rgba(0, 230, 118, 0.1);
+    color: #00e676;
+  }
+`;
 
-        transition:.3s;
+export const CommentArea = styled.div`
+  margin-top: 18px;
+  padding-top: 18px;
 
-        font-size:15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+`;
 
-    }
+export const CommentForm = styled.form`
+  display: flex;
+  gap: 10px;
+`;
 
-    button:hover{
+export const CommentInput = styled.input`
+  flex: 1;
 
-        color:#00E676;
+  padding: 12px 14px;
 
-        transform:scale(1.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 9px;
 
-    }
+  background: #17131f;
+  color: #ffffff;
 
-    svg{
-        font-size:18px;
-    }
+  outline: none;
+
+  &:focus {
+    border-color: #00e676;
+  }
+`;
+
+export const SendCommentButton = styled.button`
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: none;
+  border-radius: 9px;
+
+  background: #00e676;
+  color: #15111e;
+
+  cursor: pointer;
+
+  svg {
+    font-size: 18px;
+  }
+`;
+
+export const CommentList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin-top: 16px;
+`;
+
+export const CommentItem = styled.div`
+  display: flex;
+  gap: 10px;
+
+  padding: 12px;
+
+  border-radius: 10px;
+
+  background: rgba(255, 255, 255, 0.04);
+
+  img {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  strong {
+    color: #ffffff;
+    font-size: 14px;
+  }
+
+  p {
+    color: #c8c8c8;
+
+    margin-top: 4px;
+
+    font-size: 14px;
+    line-height: 1.5;
+  }
+`;
+
+export const EmptyComments = styled.p`
+  color: #8f8f9b;
+  font-size: 14px;
+`;
+export const CourseArea = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  margin-top: 24px;
+  padding: 18px;
+
+  border: 1px solid rgba(111, 0, 255, 0.35);
+  border-radius: 14px;
+
+  background: rgba(111, 0, 255, 0.08);
+`;
+
+export const SubscribersCount = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #cfcfcf;
+  font-size: 14px;
+  font-weight: 600;
+
+  svg {
+    color: #00e676;
+    font-size: 19px;
+  }
+`;
+
+export const CourseButtons = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+`;
+
+export const SubscribeButton = styled.button`
+  min-width: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 12px 20px;
+
+  border: ${({ $subscribed }) =>
+    $subscribed ? "1px solid #00e676" : "none"};
+
+  border-radius: 10px;
+
+  background: ${({ $subscribed }) =>
+    $subscribed ? "rgba(0, 230, 118, 0.12)" : "#6f00ff"};
+
+  color: ${({ $subscribed }) =>
+    $subscribed ? "#00e676" : "#ffffff"};
+
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+
+  transition: 0.2s;
+
+  svg {
+    font-size: 19px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+
+export const AccessCourseButton = styled.button`
+  min-width: 150px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  padding: 12px 20px;
+
+  border: 1px solid
+    ${({ $locked }) => ($locked ? "#77727f" : "#00e676")};
+
+  border-radius: 10px;
+
+  background: transparent;
+
+  color: ${({ $locked }) =>
+    $locked ? "#9b98a1" : "#00e676"};
+
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 700;
+
+  transition: 0.2s;
+
+  svg {
+    font-size: 20px;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+
+    background: ${({ $locked }) =>
+      $locked
+        ? "rgba(255, 255, 255, 0.04)"
+        : "rgba(0, 230, 118, 0.1)"};
+  }
+
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+`;
+export const DeletePostButton = styled.button`
+  position: absolute;
+  top: 26px;
+  right: 66px;
+
+  width: 46px;
+  height: 46px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 2px solid #ff5c5c;
+  border-radius: 12px;
+
+  background: rgba(255, 92, 92, 0.12);
+  color: #ff5c5c;
+
+  cursor: pointer;
+  z-index: 5;
+
+  transition: 0.2s;
+
+  svg {
+    font-size: 22px;
+  }
+
+  &:hover {
+    background: #ff5c5c;
+    color: #ffffff;
+    transform: scale(1.08);
+  }
+`;
+
+export const Content = styled.div`
+  position: relative;
+
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 26px;
+
+  @media (max-width: 600px) {
+    padding: 20px;
+  }
 `;

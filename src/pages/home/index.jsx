@@ -52,10 +52,8 @@ const Home = () => {
           </Title>
 
           <TextContent>
-            Desenvolva habilidades em programação, banco de dados,
-            desenvolvimento web e inteligência artificial com projetos
-            práticos, desafios reais e uma comunidade pronta para ajudar
-            você a evoluir.
+           Aprenda novas tecnologias, publique seus projetos,
+           compartilhe conhecimento e evolua junto com a comunidade.
           </TextContent>
 
           <Button
